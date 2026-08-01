@@ -1,22 +1,7 @@
-# Dependencies
 node_modules
-
-# Build output
 dist
-
-# Vercel
-.vercel
-
-# Environment (never commit real secrets)
 .env
-.env.*
-!.env.example
-
-# Logs
+.env.local
+.env.*.local
 *.log
-npm-debug.log*
-
-# Editor / OS
 .DS_Store
-.idea
-.vscode
