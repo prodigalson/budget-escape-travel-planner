@@ -55,7 +55,7 @@ export class ResultsView {
     this.onRetry = onRetry;
     this.inputs = null;
     this._results = [];
-    this._lastTrigger = null;
+    this._lastTriggerId = null;
     this._bind();
   }
 
@@ -73,15 +73,18 @@ export class ResultsView {
       }
       const open = event.target.closest('[data-open-detail]');
       if (open) {
-        this._lastTrigger = open;
+        if (open.tagName === 'A') event.preventDefault();
+        this._lastTriggerId = open.dataset.openDetail;
         this._showDetail(open.dataset.openDetail);
         return;
       }
       const back = event.target.closest('[data-back]');
       if (back) {
         this._showList();
-        if (this._lastTrigger && this._lastTrigger.isConnected) {
-          this._lastTrigger.focus();
+        const id = this._lastTriggerId;
+        if (id) {
+          const card = this.root.querySelector(`[data-open-detail="${id}"]`);
+          if (card) card.focus({ preventScroll: true });
         }
         return;
       }
@@ -314,7 +317,8 @@ export class ResultsView {
         </div>
       </section>
     `);
-    this._lastTriggerId = id;
+    const backEl = this.root.querySelector('.detail__back');
+    if (backEl) backEl.focus({ preventScroll: true });
   }
 
   _showList() {
