@@ -20,8 +20,14 @@ currently ships:
   the reference "Parameters of Escape" editorial direction.
 - A **shared app shell**: global reset, header/nav, footer, base layout grid,
   and a reusable **circular budget control** component.
-- A canonical `index.html` shell that later issues build the real input
-  → results → itinerary flow on top of.
+- The mobile-first **input flow**: departure, budget (circular + exact +
+  currency), travelers, trip length, and dates with flexibility, emitting one
+  structured `inputs` object.
+- The **results engine**: honest all-in cost estimates and fit-based ranking,
+  image-led destination cards, an itemized estimate breakdown, a destination
+  detail panel, and "refine inputs" re-ranking. Results are filtered to those
+  whose all-in estimate fits the budget and ranked by fit (budget fit, best
+  season, ideal stay length).
 
 The visual direction preserves the reference design language:
 
@@ -69,19 +75,38 @@ The build outputs a static site to `dist/` (see `vite.config.js`). The app is
 deployed to Vercel from the `main` branch; see `vercel.json` for rewrite/URL
 settings. Do not deploy production infrastructure from a feature branch.
 
+## Cost & data honesty
+
+Every result shows its data source and last-checked time. Estimates are ranges
+built from public travel-cost guides — they are **illustrative, never live or
+bookable pricing**. Cost assumptions live in `src/data/destinations.js` in a
+reference currency (USD) with documented image provenance (source, license,
+credit) per destination. Currency conversion for non-USD budgets goes through
+the pluggable seam in `src/rates.js`, which defaults to a clearly-labeled
+bundled reference rate.
+
 ## Directory layout
 
 ```
 ├── index.html              # canonical app shell
 ├── src/
-│   ├── main.js             # entry point
+│   ├── main.js             # entry point (wires input -> results)
+│   ├── inputs.js           # shared inputs model + validation
+│   ├── engine.js           # estimate + ranking engine
+│   ├── rates.js            # currency conversion seam
+│   ├── data/
+│   │   └── destinations.js # seed destinations (costs + image provenance)
 │   ├── styles/
 │   │   ├── tokens.css      # design tokens (color, space, type, radius, hairline, breakpoints)
 │   │   ├── base.css        # reset + base element styles
 │   │   ├── layout.css      # shell layout grid (header/nav, main, footer)
-│   │   └── components.css  # component styles (budget control, cards, buttons)
+│   │   ├── components.css  # component styles (budget control, cards, buttons)
+│   │   └── results.css     # results/summary/detail styles
 │   └── components/
-│       └── budget-control.js  # reusable circular budget selector
+│       ├── budget-control.js  # reusable circular budget selector
+│       ├── input-flow.js      # mobile-first input flow
+│       └── results.js         # results grid + breakdown + detail
+├── test/                  # node:test unit tests (inputs, engine, data)
 ├── .github/workflows/ci.yml  # lint + build on PRs and main
 └── vercel.json
 ```
