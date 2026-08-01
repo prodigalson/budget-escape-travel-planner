@@ -102,12 +102,12 @@ export class BudgetControl {
 
     const ring = document.createElement('div');
     ring.className = 'budget-ring';
+    ring.tabIndex = 0;
     ring.setAttribute('role', 'slider');
     ring.setAttribute('aria-labelledby', 'budget-control-label');
     ring.setAttribute('aria-valuemin', String(this.min));
     ring.setAttribute('aria-valuemax', String(this.max));
     ring.setAttribute('aria-valuenow', String(this.amount));
-    ring.tabIndex = 0;
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', '0 0 220 220');
@@ -140,7 +140,7 @@ export class BudgetControl {
     currency.textContent = this.currency;
     const hint = document.createElement('span');
     hint.className = 'budget-ring__hint';
-    hint.textContent = 'Tap or drag the ring';
+    hint.textContent = 'Tap, drag, or use arrow keys';
     display.append(amount, currency, hint);
     ring.appendChild(display);
 
@@ -200,6 +200,7 @@ export class BudgetControl {
       this._input.value = String(this.amount);
     }
     this._ring.setAttribute('aria-valuenow', String(this.amount));
+    this._ring.setAttribute('aria-valuetext', this._currency().format(this.amount));
   }
 
   setAmount(value) {
