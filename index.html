@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Budget Escape — turn your total vacation budget into exciting, affordable travel destination ideas."
+    />
+    <meta name="theme-color" content="#F3EFE7" />
+    <title>Budget Escape — Travel Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/styles/tokens.css" />
+    <link rel="stylesheet" href="/src/styles/base.css" />
+    <link rel="stylesheet" href="/src/styles/layout.css" />
+    <link rel="stylesheet" href="/src/styles/components.css" />
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="page-shell site-header__inner">
+        <a class="brand" href="/" aria-label="Budget Escape home">
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span class="brand__name">Budget Escape</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <ul class="site-nav__list">
+            <li><a class="site-nav__link" href="#planner">Plan</a></li>
+            <li><a class="site-nav__link" href="#inspiration">Inspiration</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="site-main">
+      <div class="page-shell">
+        <section class="hero">
+          <span class="eyebrow hero__eyebrow">Your escape, within reach</span>
+          <h1 class="hero__title">Make your budget your itinerary.</h1>
+          <p class="hero__lede">
+            Tell us the total you can spend and where you start from. We turn it
+            into exciting destinations you can actually afford — with transparent,
+            estimated all-in costs.
+          </p>
+        </section>
+
+        <section id="planner" class="section-head" aria-labelledby="planner-title">
+          <h2 class="section-head__title" id="planner-title">Start planning</h2>
+          <p class="section-head__lede">
+            Set your total vacation budget. The circular control works like the
+            reference design, or enter an exact amount.
+          </p>
+          <div id="budget-control" class="budget-control"></div>
+        </section>
+
+        <section id="inspiration" class="section-head" aria-labelledby="inspiration-title">
+          <h2 class="section-head__title" id="inspiration-title">Inspiration</h2>
+          <p class="section-head__lede">
+            Real destinations, honest estimated costs. Prices are estimates, not
+            live bookings.
+          </p>
+          <div class="dest-grid" aria-live="polite">
+            <!-- Destination cards render here in later issues. -->
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="page-shell site-footer__inner">
+        <div class="site-footer__row">
+          <a class="brand" href="/" aria-label="Budget Escape home">
+            <span class="brand__mark" aria-hidden="true"></span>
+            <span class="brand__name">Budget Escape</span>
+          </a>
+          <p class="site-footer__disclaimer">
+            Estimates are illustrative and based on public data sources; exact
+            prices vary. We never imply live, bookable pricing.
+          </p>
+        </div>
+        <div class="site-footer__row">
+          <p class="site-footer__meta">
+            <span>© <span id="year"></span> Budget Escape</span>
+            <span>Data source &amp; last-checked time shown per result.</span>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
