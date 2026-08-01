@@ -28,7 +28,7 @@
  */
 
 import { TRIP_LENGTHS } from './inputs.js';
-import { BASE_CURRENCY, convert } from './rates.js';
+import { BASE_CURRENCY, convert, getRateInfo } from './rates.js';
 
 export function nightsForTripLength(tripLength) {
   const preset = TRIP_LENGTHS.find((t) => t.value === tripLength);
@@ -74,6 +74,7 @@ function transportCosts(destination) {
  */
 export async function buildEstimate(destination, inputs) {
   const nights = nightsForTripLength(inputs.tripLength);
+  const rateInfo = await getRateInfo(BASE_CURRENCY, inputs.currency);
   const travelers = inputs.travelers;
   const currency = inputs.currency;
   const costs = destination.costs;
@@ -146,6 +147,7 @@ export async function buildEstimate(destination, inputs) {
     travelers,
     rooms,
     currency,
+    rateInfo,
     transportMode: transportCosts(destination).mode,
     categories,
     contingency,

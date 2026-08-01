@@ -68,6 +68,7 @@ test('showResults renders a card per result with image, price, badge, CTA', asyn
   assert.ok(root.innerHTML.includes('data-open-detail'));
   assert.ok(root.innerHTML.includes('fit-badge'));
   assert.ok(root.innerHTML.includes('loading="lazy"'));
+  assert.ok(root.innerHTML.includes(ranked[0].destination.image.credit), 'card surfaces image credit');
   for (const r of ranked.slice(0, 3)) {
     assert.ok(root.innerHTML.includes(r.destination.name));
   }

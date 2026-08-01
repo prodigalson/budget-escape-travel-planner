@@ -137,6 +137,12 @@
   color: var(--muted-on-canvas);
 }
 
+.dest-card__credit {
+  font-size: var(--fs-tiny);
+  color: var(--muted-on-canvas);
+  margin-top: 2px;
+}
+
 .dest-card__cta {
   align-self: flex-start;
   margin-top: var(--space-1);
