@@ -22,7 +22,7 @@ import { TRIP_LENGTHS } from '../inputs.js';
 
 const CATEGORIES = [
   { key: 'transport', label: 'Transport (round trip)', basis: 'per traveler' },
-  { key: 'accommodation', label: 'Accommodation', basis: 'per traveler, per night' },
+  { key: 'accommodation', label: 'Accommodation', basis: 'per room, per night (shared)' },
   { key: 'meals', label: 'Meals', basis: 'per traveler, per night' },
   { key: 'localTransport', label: 'Local transport', basis: 'per traveler, per night' },
   { key: 'activities', label: 'Activities & entry', basis: 'per traveler, per night' },
@@ -277,7 +277,7 @@ export class ResultsView {
             <div class="detail__fact"><dt>Best season</dt><dd>${escapeHtml(destination.bestSeason)}</dd></div>
             <div class="detail__fact"><dt>Travel time</dt><dd>${escapeHtml(destination.travelTime.label)}</dd></div>
             <div class="detail__fact"><dt>Suggested stay</dt><dd>${destination.suggestedStayNights[0]}–${destination.suggestedStayNights[1]} nights</dd></div>
-            <div class="detail__fact"><dt>Estimate basis</dt><dd>${estimate.travelers} traveler${estimate.travelers === 1 ? '' : 's'} · ${estimate.nights} nights</dd></div>
+            <div class="detail__fact"><dt>Estimate basis</dt><dd>${estimate.travelers} traveler${estimate.travelers === 1 ? '' : 's'} · ${estimate.nights} nights · ${estimate.rooms} room${estimate.rooms === 1 ? '' : 's'}</dd></div>
           </dl>
 
           <h3 class="detail__subhead">What's included</h3>

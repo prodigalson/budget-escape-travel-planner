@@ -6,7 +6,7 @@ import { SHARED_ASSUMPTIONS } from '../src/data/destinations.js';
 
 const CATEGORIES = [
   'flightsPerPerson',
-  'accommodationPerPersonPerNight',
+  'accommodationPerRoomPerNight',
   'mealsPerPersonPerNight',
   'localTransportPerPersonPerNight',
   'activitiesPerPersonPerNight',

@@ -48,39 +48,44 @@ test('buildEstimate sums categories and applies contingency per travelers*nights
 
   // transport = per-person flight × travelers
   assert.equal(estimate.categories.transport.low, prague.costs.flightsPerPerson.low);
-  assert.equal(estimate.categories.transport.low, 120);
-  assert.equal(estimate.categories.transport.high, 260);
+  assert.equal(estimate.categories.transport.low, 95);
+  assert.equal(estimate.categories.transport.high, 220);
 
-  // per-person-per-night × travelers × nights
+  // per-person-per-night × travelers × nights (room: single traveller = 1 room)
   assert.equal(estimate.categories.accommodation.low, 60 * 7);
   assert.equal(estimate.categories.meals.low, 35 * 7);
 
-  // numbers verified above
-  assert.ok(Math.abs(estimate.subtotal.low - 972) < 0.01);
-  assert.ok(Math.abs(estimate.subtotal.high - 1806) < 0.01);
+  // numbers verified against the recalibrated Prague costs
+  assert.ok(Math.abs(estimate.subtotal.low - 947) < 0.01);
+  assert.ok(Math.abs(estimate.subtotal.high - 1766) < 0.01);
   assert.equal(estimate.contingency.percent, 10);
-  assert.ok(Math.abs(estimate.contingency.low - 97.2) < 0.01);
-  assert.ok(Math.abs(estimate.total.low - 1069.2) < 0.01);
-  assert.ok(Math.abs(estimate.total.high - 1986.6) < 0.01);
+  assert.ok(Math.abs(estimate.contingency.low - 94.7) < 0.01);
+  assert.ok(Math.abs(estimate.total.low - 1041.7) < 0.01);
+  assert.ok(Math.abs(estimate.total.high - 1942.6) < 0.01);
 });
 
-test('buildEstimate scales with travelers count', async () => {
+test('buildEstimate scales with travelers, sharing a room for the second traveler', async () => {
   const estimate = await buildEstimate(prague, baseInputs({ travelers: 2 }));
-  assert.ok(Math.abs(estimate.categories.accommodation.low - 60 * 2 * 7) < 0.01);
-  assert.ok(Math.abs(estimate.total.low - 1069.2 * 2) < 0.01);
+  // two travelers sleep in ONE room (rooms = ceil(2/2) = 1)
+  assert.equal(estimate.rooms, 1);
+  assert.ok(Math.abs(estimate.categories.accommodation.low - 60 * 1 * 7) < 0.01);
+  // meals / activities scale per-person
+  assert.ok(Math.abs(estimate.categories.meals.low - 35 * 2 * 7) < 0.01);
+  // total deliberately less than 2x a single traveller (room is shared)
+  assert.ok(Math.abs(estimate.total.low - 1474 * 1.1) < 0.01);
 });
 
 test('buildEstimate converts costs to the user currency via the rates seam', async () => {
   const estimate = await buildEstimate(prague, baseInputs({ currency: 'EUR' }));
   // USD -> EUR bundled rate is 0.92
   assert.equal(estimate.currency, 'EUR');
-  assert.ok(Math.abs(estimate.categories.transport.low - 120 * 0.92) < 0.01);
-  assert.ok(Math.abs(estimate.total.low - 1069.2 * 0.92) < 0.01);
+  assert.ok(Math.abs(estimate.categories.transport.low - 95 * 0.92) < 0.01);
+  assert.ok(Math.abs(estimate.total.low - 1041.7 * 0.92) < 0.01);
 });
 
 test('affordability is decided by the central all-in estimate', async () => {
   const tight = await buildEstimate(prague, baseInputs({ budgetAmount: 1000 }));
-  // Prague mid ≈ 1527.9 > 1000 -> not affordable
+  // Prague mid ≈ 1492 > 1000 -> not affordable
   assert.equal(tight.affordability.affordable, false);
 
   const roomy = await buildEstimate(prague, baseInputs({ budgetAmount: 2000 }));
@@ -92,7 +97,7 @@ test('affordability is decided by the central all-in estimate', async () => {
 });
 
 test('rankDestinations keeps only affordable results and sorts by fit score desc', async () => {
-  const inputs = baseInputs({ budgetAmount: 3000, currency: 'EUR', travelers: 2 });
+  const inputs = baseInputs({ budgetAmount: 2500, currency: 'USD', travelers: 2 });
   const results = await rankDestinations(DESTINATIONS, inputs);
 
   assert.ok(results.length >= 1, 'expected at least one affordable result');
@@ -116,10 +121,24 @@ test('rankDestinations returns an empty list when nothing fits', async () => {
   assert.deepEqual(results, []);
 });
 
+test('a couple at an ordinary budget still gets several affordable options (regression)', async () => {
+  const couple = await rankDestinations(
+    DESTINATIONS,
+    baseInputs({ budgetAmount: 2500, currency: 'USD', travelers: 2, tripLength: 'week' }),
+  );
+  assert.ok(couple.length >= 3, 'couple, week, $2500 should return several');
+
+  const singleDefault = await rankDestinations(
+    DESTINATIONS,
+    baseInputs({ budgetAmount: 1500, currency: 'USD', travelers: 1, tripLength: 'week' }),
+  );
+  assert.ok(singleDefault.length >= 3, 'default single, week, $1500 should return several');
+});
+
 test('all destination cost assumptions are in the reference currency model', () => {
   for (const d of DESTINATIONS) {
     const c = d.costs;
-    const cat = [c.flightsPerPerson, c.accommodationPerPersonPerNight];
+    const cat = [c.flightsPerPerson, c.accommodationPerRoomPerNight];
     const baseTagged = cat.every((r) => r.low >= 0 && r.high >= r.low);
     assert.ok(baseTagged, `${d.id}: base ranges are valid`);
     assert.ok(c.contingencyPercent >= 0 && c.contingencyPercent <= 30, `${d.id}: valid contingency`);

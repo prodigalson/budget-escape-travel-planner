@@ -9,8 +9,18 @@
  *           + taxes/fees + contingency
  *
  * each as a low–high range, computed for the traveler count and trip length.
- * Results are filtered to those that FIT the budget (the all-in high bound
- * must not exceed the budget) and ranked by a fit score.
+ *
+ * Affordability rule: a destination is affordable when its CENTRAL (midpoint)
+ * all-in estimate does not exceed the budget — i.e. the budget must not be
+ * exceeded by the likely all-in cost. The full low–high range and remaining
+ * buffer are surfaced transparently so top-of-range figures that exceed the
+ * budget are visible and clearly labeled (see the fit badge and "remaining
+ * buffer" in the results view).
+ *
+ * Accommodation is modeled per ROOM (a room sleeps up to two), so a second
+ * traveler sharing a room adds meals, transport, and activities, but not a
+ * full second room — keeping multi-traveler trips affordable at ordinary
+ * budgets.
  *
  * Currency: cost assumptions are stored in a reference currency (USD, see
  * `src/rates.js`) and converted to the user's currency through the `convert`
@@ -69,21 +79,23 @@ export async function buildEstimate(destination, inputs) {
   const costs = destination.costs;
 
   const transport = await convertRange(transportCosts(destination, costs), currency);
-  const accommodation = await convertRange(costs.accommodationPerPersonPerNight, currency);
+  const accommodation = await convertRange(costs.accommodationPerRoomPerNight, currency);
   const meals = await convertRange(costs.mealsPerPersonPerNight, currency);
   const localTransport = await convertRange(costs.localTransportPerPersonPerNight, currency);
   const activities = await convertRange(costs.activitiesPerPersonPerNight, currency);
   const taxesFees = await convertRange(costs.taxesFeesPerPerson, currency);
 
   const scaleDaily = travelers * nights;
+  // A room sleeps up to two travelers; additional pairs need another room.
+  const rooms = Math.max(1, Math.ceil(travelers / 2));
   const categories = {
     transport: {
       low: transport.low * travelers,
       high: transport.high * travelers,
     },
     accommodation: {
-      low: accommodation.low * scaleDaily,
-      high: accommodation.high * scaleDaily,
+      low: accommodation.low * rooms * nights,
+      high: accommodation.high * rooms * nights,
     },
     meals: {
       low: meals.low * scaleDaily,
@@ -132,6 +144,7 @@ export async function buildEstimate(destination, inputs) {
     destinationId: destination.id,
     nights,
     travelers,
+    rooms,
     currency,
     transportMode: transportCosts(destination).mode,
     categories,
@@ -202,7 +215,9 @@ function fitScore(estimate, destination, month) {
 
 /**
  * Rank all destinations against the user's `inputs`:
- *  1. Drop any that don't fit the budget (all-in high must not exceed budget).
+ *  1. Drop any that don't fit the budget — a destination is affordable when
+ *     its CENTRAL (midpoint) all-in estimate does not exceed the budget (see
+ *     the affordability rule above; the full range and buffer stay visible).
  *  2. Order the rest by fit score, high to low (tie-break on total low).
  * Optionally pass `opts.month` to override the requested month for matching.
  */
