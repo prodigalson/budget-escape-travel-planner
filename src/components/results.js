@@ -17,7 +17,7 @@ import {
   COST_LAST_CHECKED,
   SHARED_ASSUMPTIONS,
 } from '../data/destinations.js';
-import { BASE_CURRENCY, RATES_SOURCE, RATES_LAST_CHECKED } from '../rates.js';
+import { BASE_CURRENCY } from '../rates.js';
 import { TRIP_LENGTHS } from '../inputs.js';
 
 const CATEGORIES = [
@@ -207,6 +207,7 @@ export class ResultsView {
           <p class="dest-card__meta">
             Travel ${escapeHtml(destination.travelTime.label)} · Best ${escapeHtml(destination.bestSeason)}
           </p>
+          <p class="dest-card__credit">${escapeHtml(img.credit)}</p>
           <button type="button" class="btn btn--secondary dest-card__cta" data-open-detail="${destination.id}">
             View breakdown &amp; details
           </button>
@@ -236,7 +237,11 @@ export class ResultsView {
     const currencyNote =
       estimate.currency === BASE_CURRENCY
         ? `Costs are ${estimate.currency} estimates.`
-        : `Costs converted to ${estimate.currency} using ${escapeHtml(RATES_SOURCE)} (${RATES_LAST_CHECKED}).`;
+        : `Costs converted to ${estimate.currency} using ${escapeHtml(estimate.rateInfo.source)} (${escapeHtml(estimate.rateInfo.lastChecked)}).${
+            estimate.rateInfo.bundled
+              ? ' The live rate was unavailable, so a bundled reference rate is shown.'
+              : ''
+          }`;
     const seasonYes = (destination.seasonMonths || []).includes((this.inputs?.dates?.approximate) || '');
     const tripMatch = fit.tripMatch > 0.8;
     const reasoning = [

@@ -2,6 +2,9 @@ import { InputFlow } from './components/input-flow.js';
 import { ResultsView } from './components/results.js';
 import { DESTINATIONS } from './data/destinations.js';
 import { rankDestinations } from './engine.js';
+import { enableLiveRates } from './rates.js';
+
+enableLiveRates();
 
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = String(new Date().getFullYear());

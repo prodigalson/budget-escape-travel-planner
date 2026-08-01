@@ -81,9 +81,16 @@ Every result shows its data source and last-checked time. Estimates are ranges
 built from public travel-cost guides — they are **illustrative, never live or
 bookable pricing**. Cost assumptions live in `src/data/destinations.js` in a
 reference currency (USD) with documented image provenance (source, license,
-credit) per destination. Currency conversion for non-USD budgets goes through
-the pluggable seam in `src/rates.js`, which defaults to a clearly-labeled
-bundled reference rate.
+credit) per destination.
+
+Currency conversion for non-USD budgets goes through `src/rates.js`. In the
+browser the app fetches a live USD→EUR rate from
+[frankfurter.dev](https://frankfurter.dev) (ECB reference rates), caches it for
+one hour, and attaches the source + `as_of` timestamp to every estimate. If the
+live provider is unreachable it degrades to a clearly-labeled bundled reference
+rate. Unit tests use the deterministic bundled rate. See
+[`docs/data-sources.md`](docs/data-sources.md) for the full data-source spec
+(APIs, licensing, attribution, cache TTLs, fallback rules per category).
 
 ## Directory layout
 
