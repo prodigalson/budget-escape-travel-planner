@@ -1,0 +1,285 @@
+/* --- Buttons --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--touch-min);
+  padding: 0 var(--space-6);
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-wide);
+  transition: transform var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--primary {
+  background-color: var(--color-forest);
+  color: var(--text-on-forest);
+}
+
+.btn--primary:hover {
+  background-color: var(--color-forest-soft);
+}
+
+.btn--secondary {
+  background-color: var(--color-pale);
+  color: var(--color-forest);
+}
+
+.btn--secondary:hover {
+  background-color: var(--color-pale-soft);
+}
+
+/* --- Budget circular control --- */
+.budget-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  padding-block-start: var(--space-8);
+  background-color: var(--color-surface);
+  border: var(--hairline);
+  border-radius: var(--radius-lg);
+}
+
+.budget-control__label {
+  font-size: var(--fs-small);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--muted-on-surface);
+  text-align: center;
+}
+
+.budget-ring {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  touch-action: manipulation;
+  user-select: none;
+  cursor: pointer;
+  border-radius: var(--radius-full);
+}
+
+.budget-ring__track {
+  fill: none;
+  stroke: var(--color-pale);
+  stroke-width: 10;
+}
+
+.budget-ring:focus-visible {
+  outline: 3px solid var(--color-forest);
+  outline-offset: 3px;
+  border-radius: var(--radius-full);
+}
+
+.budget-ring__progress {
+  fill: none;
+  stroke: var(--color-forest);
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--duration-base) var(--ease-out);
+}
+
+.budget-ring__display {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  text-align: center;
+}
+
+.budget-ring__amount {
+  font-size: var(--fs-headline);
+  font-weight: var(--fw-bold);
+  color: var(--color-forest);
+  line-height: 1;
+}
+
+.budget-ring__currency {
+  font-size: var(--fs-title);
+  font-weight: var(--fw-semibold);
+  color: var(--color-olive);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.budget-ring__hint {
+  font-size: var(--fs-tiny);
+  color: var(--muted-on-canvas);
+}
+
+.budget-control__exact {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 320px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.budget-control__exact-input {
+  min-height: var(--touch-min);
+  width: 140px;
+  padding-inline: var(--space-4);
+  border: var(--hairline-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  font-size: var(--fs-body);
+  text-align: center;
+}
+
+.budget-control__currency {
+  display: inline-flex;
+  min-height: var(--touch-min);
+  align-items: center;
+  gap: var(--space-1);
+  padding-inline: var(--space-2);
+  border: var(--hairline-strong);
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-semibold);
+  color: var(--color-forest);
+  letter-spacing: var(--tracking-caps);
+}
+
+.budget-control__tiers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: center;
+}
+
+.budget-control__tier {
+  min-height: var(--touch-min);
+  padding: 0 var(--space-4);
+  border: var(--hairline);
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-medium);
+  color: var(--color-forest);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.budget-control__tier:hover {
+  background-color: var(--color-pale);
+}
+
+/* --- Destination card grid --- */
+.dest-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+  margin-top: var(--space-8);
+}
+
+.dest-card {
+  background-color: var(--color-surface);
+  border: var(--hairline);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: transform var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
+}
+
+.dest-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px -18px rgba(30, 63, 39, 0.5);
+}
+
+.dest-card__media {
+  aspect-ratio: 16 / 10;
+  background-color: var(--color-pale-soft);
+  overflow: hidden;
+}
+
+.dest-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.dest-card:hover .dest-card__media img {
+  transform: scale(1.03);
+}
+
+.dest-card__body {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.dest-card__title {
+  font-size: var(--fs-title);
+  color: var(--color-forest);
+}
+
+.dest-card__price {
+  font-size: var(--fs-subtitle);
+  font-weight: var(--fw-bold);
+  color: var(--color-forest);
+}
+
+.dest-card__source {
+  font-size: var(--fs-tiny);
+  color: var(--muted-on-canvas);
+}
+
+/* --- Section heading --- */
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border-top: var(--hairline-strong);
+  padding-top: var(--space-4);
+  margin-top: var(--space-12);
+}
+
+.section-head__title {
+  font-size: var(--fs-headline);
+  color: var(--color-forest);
+}
+
+.section-head__lede {
+  color: var(--muted-on-canvas);
+  max-width: 60ch;
+}
+
+#budget-control {
+  margin-top: var(--space-6);
+}
+
+/* --- Tablet: two-up destination grid --- */
+@media (min-width: 640px) {
+  .dest-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --- Desktop: four-up destination grid --- */
+@media (min-width: 1024px) {
+  .dest-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .budget-control__exact {
+    justify-content: flex-start;
+  }
+}
