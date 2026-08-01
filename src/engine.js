@@ -48,7 +48,7 @@ async function convertRange(range, currency) {
   return { low: low.amount, high: high.amount };
 }
 
-function transportCosts(destination, travelerCost) {
+function transportCosts(destination) {
   const costs = destination.costs;
   if (destination.transportMode === 'train' || destination.transportMode === 'either') {
     const train = costs.trainPerPerson || costs.flightsPerPerson;
