@@ -107,6 +107,7 @@ export class BudgetControl {
     ring.setAttribute('aria-valuemin', String(this.min));
     ring.setAttribute('aria-valuemax', String(this.max));
     ring.setAttribute('aria-valuenow', String(this.amount));
+    ring.tabIndex = 0;
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', '0 0 220 220');
@@ -161,6 +162,7 @@ export class BudgetControl {
     const currencyBtn = document.createElement('button');
     currencyBtn.type = 'button';
     currencyBtn.className = 'budget-control__currency';
+    currencyBtn.textContent = this._currency().label;
     currencyBtn.setAttribute('aria-pressed', 'false');
     currencyBtn.addEventListener('click', () => this.toggleCurrency());
     this._currencyBtn = currencyBtn;

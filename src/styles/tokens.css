@@ -14,6 +14,7 @@
   --text-on-canvas: #1A1F1B;
   --text-on-forest: #F3EFE7;
   --muted-on-canvas: #6E6B52;
+  --muted-on-surface: #6E6B52;
 
   /* --- Hairlines --- */
   --hairline: 1px solid rgba(30, 63, 39, 0.16);
