@@ -183,6 +183,7 @@ export class InputFlow {
   }
 
   _bind() {
+    this._els.departure.addEventListener('input', () => this._onDepartureChange());
     this._els.departure.addEventListener('change', () => this._onDepartureChange());
     this._els.month.addEventListener('change', () => {
       this.inputs.dates.approximate = this._els.month.value;
